@@ -12,7 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         //
-        $middleware->validateCsrfTokens(except: ['/reset']);
+        $middleware->validateCsrfTokens(
+            except: [
+                '/reset',
+                '/event'
+            ]
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

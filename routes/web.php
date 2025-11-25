@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\EventController;
 
 Route::get('/', function () {
     return 'We tested this successfully!';
@@ -15,6 +16,4 @@ Route::post('/reset', [BalanceController::class, 'reset']);
 
 Route::get('/balance', [BalanceController::class, 'getBalance']);
 
-Route::post('/event', function (): string {
-    return 'We tested this successfully!';
-});
+Route::post('/event', [EventController::class, 'handleEvent']);
