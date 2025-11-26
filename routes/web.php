@@ -1,15 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\EventController;
 
-Route::get('/', function () {
-    return 'We tested this successfully!';
-});
+Route::post('/reset', [BalanceController::class, 'reset']);
 
-Route::get('/health', function () {
-    return response()->json(['status' => 'OK'], 200);
-});
+Route::get('/balance', [BalanceController::class, 'getBalance']);
 
-Route::post('/reset', function () {
-    return 'CSRF is disabled for this route.';
-});
+Route::post('/event', [EventController::class, 'handleEvent']);

@@ -1,59 +1,63 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Simple Balance System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A lightweight, stateless REST API for handling financial account transactions (deposits, withdrawals, and transfers). Built with **Laravel 12** and **Pest**, designed to be simple, testable, and strictly adherent to the provided technical specifications.
 
-## About Laravel
+## 📋 Project Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project implements a JSON API that manages account balances without a persistent database engine (SQL), relying on a file-based cache system to simulate storage. It focuses on:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* **Simplicity:** No unnecessary dependencies or database migrations.
+* **Clean Architecture:** Separation of concerns using Services, Repositories, and DTOs.
+* **Reliability:** Fully covered by automated Feature Tests using Pest.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🚀 Technologies
 
-## Learning Laravel
+* **PHP 8.2+**
+* **Laravel 12** (Framework)
+* **Pest** (Testing Framework)
+* **Git Flow** (Branching Strategy)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🏗 Architecture Decisions
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Since "Durability is not a requirement" and "Keep it simple" were the main constraints, the following architectural choices were made:
 
-## Laravel Sponsors
+1.  **Persistence:** Instead of a relational database (MySQL/Postgres), the project uses Laravel's **File Cache Driver**. This fulfills the requirement for non-durable storage while keeping the setup zero-config.
+2.  **No Eloquent Models:** To avoid overhead, simple **DTOs (Data Transfer Objects)** and a custom **Repository** pattern were used instead of Eloquent Models.
+3.  **Atomic Transactions:** Transfer logic is encapsulated within the Service layer to ensure data integrity during read/write operations in the cache.
+4.  **API Structure:** Routes are defined in `routes/web.php` with CSRF protection disabled for specific endpoints to allow stateless API access.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🛠️ Installation & Setup
 
-### Premium Partners
+Follow these steps to get the project running locally:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/linojackson/simple-balance-sys.git
+    cd simple-balance-sys
+    ```
 
-## Contributing
+2.  **Install dependencies:**
+    ```bash
+    composer install
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3.  **Configure Environment:**
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
+    *Note: The `.env` is pre-configured to use `CACHE_STORE=file` and `SESSION_DRIVER=file`.*
 
-## Code of Conduct
+4.  **Clear Config Cache (Important):**
+    Ensure the application uses the correct file driver settings:
+    ```bash
+    php artisan config:clear
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🏃‍♂️ Running the API
 
-## Security Vulnerabilities
+Start the local development server:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan serve
+```
